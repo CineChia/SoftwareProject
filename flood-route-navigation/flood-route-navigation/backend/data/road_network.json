@@ -1,0 +1,35 @@
+{
+  "_note": "Simplified, illustrative road network for Caloocan City for academic prototyping. Node coordinates are approximate real-world locations of well-known landmarks/barangays. For production or thesis-grade accuracy, replace with actual road-centerline data (e.g., OpenStreetMap export via osmnx, or LGU/MMDA GIS data) and official NOAH/DOST-ASTI hazard layers.",
+  "nodes": [
+    { "id": "monumento",   "name": "Monumento Circle",              "lat": 14.6577, "lng": 120.9836 },
+    { "id": "graceparkw",  "name": "Grace Park West",                "lat": 14.6489, "lng": 120.9838 },
+    { "id": "cityhall",    "name": "Caloocan City Hall (Sangandaan)","lat": 14.6540, "lng": 120.9736 },
+    { "id": "bagongbarrio","name": "Bagong Barrio",                  "lat": 14.6608, "lng": 120.9754 },
+    { "id": "dagatdagatan","name": "Dagat-Dagatan",                  "lat": 14.6656, "lng": 120.9670 },
+    { "id": "maypajo",     "name": "Maypajo Junction",                "lat": 14.6612, "lng": 120.9660 },
+    { "id": "llano",       "name": "Llano",                          "lat": 14.6928, "lng": 120.9847 },
+    { "id": "bagumbong",   "name": "Bagumbong",                      "lat": 14.7333, "lng": 120.9750 },
+    { "id": "camarin",     "name": "Camarin",                        "lat": 14.7395, "lng": 121.0011 },
+    { "id": "deparo",      "name": "Deparo / Zabarte Road",          "lat": 14.7280, "lng": 121.0130 },
+    { "id": "talipapa",    "name": "Talipapa (Novaliches border)",   "lat": 14.7156, "lng": 121.0242 },
+    { "id": "tala",        "name": "Tala",                           "lat": 14.7523, "lng": 121.0333 },
+    { "id": "karuhatan",   "name": "EDSA - Karuhatan Junction",      "lat": 14.6950, "lng": 120.9660 }
+  ],
+  "edges": [
+    { "from": "monumento",    "to": "graceparkw",   "road": "Rizal Avenue Extension", "flood_zone_id": null },
+    { "from": "monumento",    "to": "cityhall",     "road": "A. Mabini St.",          "flood_zone_id": null },
+    { "from": "cityhall",     "to": "bagongbarrio", "road": "10th Avenue",            "flood_zone_id": null },
+    { "from": "bagongbarrio", "to": "dagatdagatan", "road": "Samson Road",            "flood_zone_id": "fz_dagatdagatan" },
+    { "from": "dagatdagatan", "to": "maypajo",      "road": "Samson Road",            "flood_zone_id": "fz_dagatdagatan" },
+    { "from": "maypajo",      "to": "karuhatan",    "road": "EDSA",                   "flood_zone_id": null },
+    { "from": "cityhall",     "to": "llano",        "road": "Susano Road",            "flood_zone_id": null },
+    { "from": "llano",        "to": "bagumbong",    "road": "Camarin Road",           "flood_zone_id": "fz_bagumbong" },
+    { "from": "bagumbong",    "to": "camarin",      "road": "Camarin Road",           "flood_zone_id": "fz_camarin" },
+    { "from": "camarin",      "to": "deparo",       "road": "Zabarte Road",           "flood_zone_id": "fz_zabarte" },
+    { "from": "deparo",       "to": "talipapa",     "road": "Zabarte Road",           "flood_zone_id": "fz_zabarte" },
+    { "from": "talipapa",     "to": "tala",         "road": "Quirino Highway",        "flood_zone_id": "fz_tala" },
+    { "from": "camarin",      "to": "tala",         "road": "Camarin-Tala Road",      "flood_zone_id": "fz_camarin" },
+    { "from": "llano",        "to": "karuhatan",    "road": "EDSA Extension",         "flood_zone_id": null },
+    { "from": "graceparkw",   "to": "dagatdagatan", "road": "10th Avenue",            "flood_zone_id": null }
+  ]
+}

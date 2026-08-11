@@ -1,0 +1,57 @@
+{
+  "_note": "Illustrative flood-prone zones for Caloocan City, based on generally known flood-prone barangays/roads (areas near the Tullahan-Tinajeros river system and low-lying north Caloocan). Polygon shapes are simplified approximations for prototyping only. Replace with official DOST Project NOAH / DOST-ASTI hazard maps (noah.up.edu.ph, GeoRiskPH) for real-world or thesis-final accuracy.",
+  "base_hazard_level": {
+    "fz_dagatdagatan": 1,
+    "fz_bagumbong": 1,
+    "fz_camarin": 2,
+    "fz_zabarte": 2,
+    "fz_tala": 1
+  },
+  "zones": [
+    {
+      "id": "fz_dagatdagatan",
+      "name": "Dagat-Dagatan Lowland Area",
+      "description": "Low-lying reclaimed area with a history of localized flooding during monsoon rains.",
+      "polygon": [
+        [14.6670, 120.9650], [14.6670, 120.9695],
+        [14.6635, 120.9695], [14.6635, 120.9650]
+      ]
+    },
+    {
+      "id": "fz_bagumbong",
+      "name": "Bagumbong Riverside Zone",
+      "description": "Residential area near tributary creeks, prone to flash flooding during heavy/prolonged rainfall.",
+      "polygon": [
+        [14.7360, 120.9720], [14.7360, 120.9780],
+        [14.7300, 120.9780], [14.7300, 120.9720]
+      ]
+    },
+    {
+      "id": "fz_camarin",
+      "name": "Camarin Flood-Prone Corridor",
+      "description": "Historically flood-affected corridor along Camarin Road, near the Tullahan River basin.",
+      "polygon": [
+        [14.7430, 120.9980], [14.7430, 121.0040],
+        [14.7360, 121.0040], [14.7360, 120.9980]
+      ]
+    },
+    {
+      "id": "fz_zabarte",
+      "name": "Zabarte Road / Deparo Critical Zone",
+      "description": "One of the most frequently reported flood hotspots in Caloocan, adjacent to the Tullahan River; prone to severe flooding during typhoons.",
+      "polygon": [
+        [14.7320, 121.0080], [14.7320, 121.0170],
+        [14.7230, 121.0170], [14.7230, 121.0080]
+      ]
+    },
+    {
+      "id": "fz_tala",
+      "name": "Tala Lowland Pockets",
+      "description": "Scattered low-elevation pockets near the Novaliches boundary with moderate flood incidence.",
+      "polygon": [
+        [14.7560, 121.0290], [14.7560, 121.0370],
+        [14.7490, 121.0370], [14.7490, 121.0290]
+      ]
+    }
+  ]
+}

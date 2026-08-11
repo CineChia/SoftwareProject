@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flood Detection Route Navigation System — Caloocan City</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="sidebar">
+    <header class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <span class="brand-mark-ring"></span>
+        <span class="brand-mark-dot"></span>
+      </div>
+      <div class="brand-text">
+        <h1>Flood Route Navigation</h1>
+        <p>Caloocan City &middot; Metro Manila</p>
+      </div>
+    </header>
+
+    <p class="tagline">A hazard-aware routing prototype modeled on DOST&rsquo;s Project NOAH concept: combine flood hazard mapping with live conditions to route commuters around flooded roads.</p>
+
+    <section class="panel">
+      <h2 class="panel-title"><span class="idx">01</span> Simulated Rainfall</h2>
+      <p class="panel-hint">Drag to simulate current rainfall intensity (mm / 24h). Hazard levels update live.</p>
+      <input type="range" id="rainfallSlider" min="0" max="250" step="5" value="0" />
+      <div class="rainfall-readout">
+        <span id="rainfallValue">0</span><span class="unit">mm / 24h</span>
+        <span id="rainfallWarning" class="pill pill--calm">No Warning</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2 class="panel-title"><span class="idx">02</span> Plan a Route</h2>
+      <label class="field-label" for="originSelect">Origin</label>
+      <select id="originSelect"></select>
+
+      <label class="field-label" for="destinationSelect">Destination</label>
+      <select id="destinationSelect"></select>
+
+      <button id="findRouteBtn" class="btn-primary">Find Safest Route</button>
+      <p id="routeError" class="error-text" hidden></p>
+    </section>
+
+    <section class="panel" id="resultsPanel" hidden>
+      <h2 class="panel-title"><span class="idx">03</span> Route Report</h2>
+      <div class="stat-row">
+        <div class="stat">
+          <span class="stat-value" id="statDistance">—</span>
+          <span class="stat-label">km</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="statTime">—</span>
+          <span class="stat-label">est. min</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="statZones">—</span>
+          <span class="stat-label">zones crossed</span>
+        </div>
+      </div>
+
+      <h3 class="sub-heading">Situation Summary</h3>
+      <p id="situationSummary" class="summary-text">—</p>
+
+      <h3 class="sub-heading">Segments</h3>
+      <ol id="segmentList" class="segment-list"></ol>
+    </section>
+
+    <section class="panel">
+      <h2 class="panel-title"><span class="idx">04</span> Hazard Legend</h2>
+      <ul class="legend">
+        <li><span class="swatch swatch--1"></span> Low</li>
+        <li><span class="swatch swatch--2"></span> Moderate</li>
+        <li><span class="swatch swatch--3"></span> High</li>
+        <li><span class="swatch swatch--4"></span> Severe (road closed)</li>
+      </ul>
+    </section>
+
+    <footer class="disclaimer">
+      Academic prototype. Flood zone geometry and hazard levels are simplified/illustrative, not official hazard data. For real deployment, integrate DOST Project NOAH / GeoRiskPH hazard layers and live PAGASA rainfall data.
+    </footer>
+  </aside>
+
+  <!-- ===== Map ===== -->
+  <main class="map-wrap">
+    <div id="map"></div>
+    <div class="map-badge">
+      <span class="dot"></span> Live simulation — Caloocan City network
+    </div>
+  </main>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
