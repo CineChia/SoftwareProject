@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Safe Route — Malabon &amp; Caloocan</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+<style>
+  :root{
+    --paper: #f4efe4;
+    --paper-dark: #e8e0cf;
+    --ink: #2c2a24;
+    --ink-soft: #6b6558;
+    --line: rgba(44,42,36,0.14);
+    --olive: #4f6a4a;
+    --olive-dark: #384c35;
+    --amber: #d9a441;
+    --clay: #c1613f;
+    --card-shadow: 0 18px 40px -18px rgba(44,42,36,0.35), 0 2px 8px rgba(44,42,36,0.08);
+    --radius: 18px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    color: var(--ink);
+    background: var(--paper-dark);
+    overflow: hidden;
+  }
+
+  /* Map */
+  #map {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Route Panel */
+  .panel {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    width: 340px;
+    background: var(--paper);
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--line);
+    padding: 20px 20px 16px;
+    z-index: 500;
+    font-size: 14px;
+  }
+
+  .eyebrow {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 600;
+    margin: 0 0 2px;
+  }
+
+  .panel h1 {
+    font-size: 20px;
+    margin: 0 0 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 11px 12px;
+    margin-bottom: 10px;
+  }
+
+  .field:focus-within {
+    border-color: var(--olive);
+    box-shadow: 0 0 0 3px rgba(79,106,74,0.15);
+  }
+
+  .field .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .field.origin .dot { background: var(--olive); }
+  .field.dest .dot { background: var(--clay); }
+
+  .field input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13.5px;
+    color: var(--ink);
+    flex: 1;
+    min-width: 0;
+  }
+  .field input::placeholder { color: #b3ab98; }
+
+  .field .icon-btn {
+    border: none;
+    background: transparent;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1;
+    padding: 2px;
+    flex-shrink: 0;
+  }
+  .field .icon-btn:hover { color: var(--ink); }
+
+  .find-btn {
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    padding: 13px;
+    background: var(--olive);
+    color: #fff;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .find-btn:hover { background: var(--olive-dark); }
+  .find-btn:active { transform: translateY(1px); }
+
+  .result {
+    margin-top: 12px;
+    background: #fbf6ea;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 13px;
+    display: none;
+  }
+  .result.show { display: block; }
+
+  .result-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 12.5px;
+    color: #9a5a1f;
+  }
+
+  .result-meta {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+
+  /*My Location button */
+  .my-location {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    z-index: 500;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 11px 18px;
+    box-shadow: var(--card-shadow);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: var(--ink);
+  }
+  .my-location:hover { background: #fff; }
+
+  /*Legend */
+  .legend {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    z-index: 500;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    padding: 14px 18px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  .legend-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .legend-rows { display: flex; gap: 16px; }
+  .legend-row { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; }
+  .legend-swatch { width: 11px; height: 11px; border-radius: 50%; }
+  .swatch-low { background: #6a9a5c; }
+  .swatch-med { background: #d9a441; }
+  .swatch-high { background: #c1613f; }
+
+  @media (max-width: 640px) {
+    .panel { width: calc(100% - 32px); left: 16px; top: 16px; }
+    .my-location { top: 16px; right: 16px; padding: 9px 14px; font-size: 12px; }
+    .legend { right: 16px; bottom: 16px; padding: 10px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<!-- Route planning panel -->
+<div class="panel">
+  <p class="eyebrow">Plan a routes</p>
+  <h1>Malabon &amp; Caloocan</h1>
+
+  <div class="field origin">
+    <span class="dot"></span>
+    <input type="text" value="University of the East, U. E. Tech Road" />
+    <button class="icon-btn" title="Use current location">◎</button>
+    <button class="icon-btn" title="Clear">✕</button>
+  </div>
+
+  <div class="field dest">
+    <span class="dot"></span>
+    <input type="text" value="Malabon, Northern Manila District, Metro" />
+    <button class="icon-btn" title="Clear">✕</button>
+  </div>
+
+  <button class="find-btn" id="findRouteBtn">Find the safest route</button>
+
+  <div class="result" id="resultCard">
+    <div class="result-title">
+      Passes through some flood-prone areas
+    </div>
+    <div class="result-meta">3.0 km · about 6 min</div>
+  </div>
+</div>
+
+<!-- My location -->
+<div class="my-location" id="myLocationBtn">
+  My location
+</div>
+
+<!-- Flood depth legend -->
+<div class="legend">
+  <div class="legend-title">
+    Flood depth
+  </div>
+  <div class="legend-rows">
+    <div class="legend-row"><span class="legend-swatch swatch-low"></span>Low</div>
+    <div class="legend-row"><span class="legend-swatch swatch-med"></span>Medium</div>
+    <div class="legend-row"><span class="legend-swatch swatch-high"></span>High</div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script>
+  // Base map centered on Malabon / Caloocan, Metro Manila
+  const map = L.map('map', {
+    zoomControl: false,
+    attributionControl: true
+  }).setView([14.6620, 120.9820], 14);
+
+  //basemap
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+  }).addTo(map);
+
+  L.control.zoom({ position: 'topright' }).addTo(map);
+
+  const origin = [14.6570, 120.9850];
+  const destination = [14.6605, 121.0000];
+
+  const originMarker = L.circleMarker(origin, {
+    radius: 7, color: '#384c35', weight: 2, fillColor: '#4f6a4a', fillOpacity: 1
+  }).addTo(map).bindPopup('University of the East');
+
+  const destMarker = L.circleMarker(destination, {
+    radius: 7, color: '#8a3b22', weight: 2, fillColor: '#c1613f', fillOpacity: 1
+  }).addTo(map).bindPopup('Malabon City Hall');
+
+  let routeLine = null;
+
+  function drawRoute() {
+    if (routeLine) map.removeLayer(routeLine);
+    routeLine = L.polyline([origin, [14.659, 120.992], destination], {
+      color: '#8a3b22',
+      weight: 5,
+      opacity: 0.9,
+      lineCap: 'round'
+    }).addTo(map);
+    map.fitBounds(routeLine.getBounds(), { padding: [80, 80] });
+    document.getElementById('resultCard').classList.add('show');
+  }
+
+  document.getElementById('findRouteBtn').addEventListener('click', drawRoute);
+
+  document.getElementById('myLocationBtn').addEventListener('click', () => {
+    map.setView(origin, 15);
+  });
+</script>
+
+</body>
+</html>
